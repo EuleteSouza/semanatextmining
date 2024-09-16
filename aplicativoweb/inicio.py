@@ -10,8 +10,8 @@ app = Flask(__name__)
 # POST - INSERIR
 # GET - RECUPERAR
 
-@app.route('/',methods=['GET','POST'])
-def index():
+@app.route('/senia',methods=['GET','POST'])
+def abrir_assistente():
     audio_path = None
     if request.method == 'POST':
         # pegar valor do html<textfield>
@@ -24,7 +24,28 @@ def index():
         audio_path = "static/audio_exemplo.mp3"
         # Salvar o arquivo
         tts.save(audio_path)
-    return render_template('index.html',audio_path=audio_path)
+    return render_template('senia.html',audio_path=audio_path)
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/login',methods=['GET','POST']) # Ele também funciona sem o get
+def logar():
+    return render_template('login.html')
+
+@app.route('/autenticar',methods=['POST','GET'])
+def autenticar():
+    # mock
+    if request.method == 'POST':
+        if request.form['senha'] == '123' and request.form['usuario'] == 'João': # request.form está pegando do formulário
+            return render_template('senia.html')
+        else:
+          msg = 'erro na autenticação'
+          return render_template('login.html',msg=msg)
+
+
+
 
 if __name__== '__main__':
     app.run(debug=True)
